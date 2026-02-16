@@ -44,7 +44,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm run docs:build
+      - run: pnpm run build
 
       - name: Generate wrangler config
         run: pnpm run wrangler:config

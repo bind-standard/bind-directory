@@ -42,7 +42,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
         if: steps.pr-check.outputs.skip != 'true'
 
-      - run: pnpm run docs:build
+      - run: pnpm run build
         if: steps.pr-check.outputs.skip != 'true'
 
       - name: Generate wrangler config
