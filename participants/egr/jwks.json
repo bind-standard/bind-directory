@@ -2,12 +2,14 @@
   "keys": [
     {
       "kty": "EC",
-      "x": "1iH5Z-eernJPLuGmHFh-bxMlLt_--TaHc5Gjdj1zZuc",
-      "y": "Yg6oFqLzZHLYJBKEh8eAuGL54artUMkKesFohSZjROE",
+      "x": "sf3SpGimBkT93NGeVfH4orlXibjGTBsAwR8enzyNUMU",
+      "y": "zz-FP7CvocYATawc_s1-a-GTbRTCIAdy0XM8ypzV4XA",
       "crv": "P-256",
-      "kid": "egr-sig-2026-01",
+      "kid": "hWQkQrntGwzotXWo0TCQkQDpb482FgnMRQ5f866BKPM",
       "use": "sig",
-      "alg": "ES256"
+      "alg": "ES256",
+      "iat": 1771260547,
+      "exp": 2086620547
     }
   ]
 }
