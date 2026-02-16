@@ -20,7 +20,8 @@
     "check": "biome check .",
     "check:fix": "biome check --fix .",
     "typecheck": "tsc --noEmit",
-    "join-directory": "ts-node scripts/scaffold-participant.ts"
+    "join-directory": "ts-node scripts/scaffold-participant.ts",
+    "manage-keys": "ts-node scripts/manage-keys.ts"
   },
   "keywords": [
     "bind",

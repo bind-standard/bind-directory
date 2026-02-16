@@ -193,9 +193,33 @@ Push your changes and open a pull request against the `main` branch. The CI pipe
 
 Once your PR is merged, your organization will appear in the directory at `bindpki.org/participants/your-org` and your public keys will be served at `bindpki.org/your-org/.well-known/jwks.json`.
 
-### Rotating Keys
+### Key Management
 
-To rotate your keys, submit a new PR updating your `jwks.json`. You can add new keys before removing old ones to ensure a smooth transition.
+Use the key management script to rotate, retire, or remove keys:
+
+```bash
+pnpm run manage-keys
+```
+
+Available commands:
+
+| Command | Description |
+|---------|-------------|
+| **list** | View all keys with their status (`active`, `pending`, `expired`) and lifecycle dates |
+| **rotate** | Generate a new key pair, optionally set `exp` on existing active keys for a grace period |
+| **retire** | Set an `exp` on an active key (immediately or after a grace period) |
+| **remove** | Remove a key from `jwks.json` entirely (cannot remove the last key) |
+
+**Recommended rotation workflow:**
+
+1. Run `pnpm run manage-keys` → **rotate**
+2. Set a 30-day expiry on the old key (grace period for consumers to pick up the new key)
+3. Submit a PR with the updated `jwks.json`
+4. After the grace period, run **remove** to clean up the expired key and submit another PR
+
+::: tip
+New private keys from rotation are saved as `private-key-<thumbprint>.json` alongside the original. All `private-key*.json` files are gitignored.
+:::
 
 ### Updating Your Profile
 

@@ -98,6 +98,16 @@ The validation pipeline warns on expired keys and not-yet-valid keys but does no
 
 Once merged, keys are served at `bindpki.org/<slug>/.well-known/jwks.json`.
 
+### Key Management
+
+Rotate, retire, or remove keys interactively:
+
+```bash
+pnpm run manage-keys
+```
+
+The script supports listing keys with status, generating a new key while setting a grace period on old keys, retiring individual keys, and removing expired keys. See the [How to Join](https://bindpki.org/join) guide for the full workflow.
+
 ## Validation
 
 The directory includes a comprehensive validation pipeline that checks structure, manifests, JWKS (including rejection of private key material), and logos:
