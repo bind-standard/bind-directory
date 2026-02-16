@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "slug": "egr",
+  "displayName": "EgR",
+  "description": "Quebec leader in damage and surety insurance for medium to large-sized businesses, operating across the Quebec-Montreal corridor.",
+  "joinedAt": "2026-02-16",
+  "status": "active",
+  "organization": {
+    "resourceType": "Organization",
+    "name": "EgR Inc.",
+    "status": "active",
+    "type": {
+      "coding": [{ "system": "https://bind.codes/OrganizationType", "code": "broker", "display": "Broker" }]
+    },
+    "address": [
+      { "use": "work", "city": "Montréal", "state": "QC", "country": "CA" }
+    ],
+    "contact": [
+      { "system": "url", "value": "https://www.egr.ca" },
+      { "system": "email", "value": "info@egr.ca", "use": "work" }
+    ],
+    "linesOfBusiness": [
+      { "coding": [{ "code": "damage-insurance" }], "text": "Damage Insurance" },
+      { "coding": [{ "code": "surety" }], "text": "Surety" },
+      { "coding": [{ "code": "marine-cargo" }], "text": "Marine Cargo" }
+    ],
+    "territories": ["QC"],
+    "credentials": [
+      {
+        "type": "broker-license",
+        "authority": "Autorité des marchés financiers",
+        "identifier": "LIC-123456",
+        "registryUrl": "https://lautorite.qc.ca/en/general-public/registers",
+        "jurisdiction": "QC"
+      }
+    ]
+  }
+}

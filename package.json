@@ -1,0 +1,46 @@
+{
+  "name": "bind-directory",
+  "version": "0.1.0",
+  "description": "BIND Trust Network Directory — Public key infrastructure for the insurance industry.",
+  "main": "dist/types/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "validate": "ts-node scripts/validate-all.ts",
+    "gen:site": "ts-node scripts/generate-site.ts",
+    "dev": "pnpm run gen:site && vitepress dev site",
+    "build": "pnpm run gen:site && vitepress build site",
+    "preview": "vitepress preview site",
+    "wrangler:config": "ts-node scripts/generate-wrangler-config.ts",
+    "deploy": "pnpm run wrangler:config && pnpm exec wrangler deploy",
+    "deploy:delete": "pnpm exec wrangler delete --force",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --fix .",
+    "format": "biome format --fix .",
+    "format:check": "biome format .",
+    "check": "biome check .",
+    "check:fix": "biome check --fix .",
+    "typecheck": "tsc --noEmit",
+    "join-directory": "ts-node scripts/scaffold-participant.ts"
+  },
+  "keywords": [
+    "bind",
+    "insurance",
+    "pki",
+    "trust-network",
+    "directory",
+    "jwks"
+  ],
+  "author": "",
+  "license": "CC0-1.0",
+  "type": "commonjs",
+  "packageManager": "pnpm@10.24.0",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.0",
+    "@types/node": "^25.2.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.13",
+    "wrangler": "^4.14.0"
+  }
+}

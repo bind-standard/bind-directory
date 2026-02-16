@@ -1,0 +1,13 @@
+{
+  "keys": [
+    {
+      "kty": "EC",
+      "x": "1iH5Z-eernJPLuGmHFh-bxMlLt_--TaHc5Gjdj1zZuc",
+      "y": "Yg6oFqLzZHLYJBKEh8eAuGL54artUMkKesFohSZjROE",
+      "crv": "P-256",
+      "kid": "egr-sig-2026-01",
+      "use": "sig",
+      "alg": "ES256"
+    }
+  ]
+}

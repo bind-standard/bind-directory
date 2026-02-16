@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0",
+  "slug": "cloudraker",
+  "displayName": "CloudRaker Inc.",
+  "description": "CloudRaker is a leading North-America provider of AI-driven productivity solutions in regulated environment; and the creators of the BIND Standard.",
+  "joinedAt": "2026-02-16",
+  "status": "pending",
+  "organization": {
+    "resourceType": "Organization",
+    "name": "CloudRaker Inc.",
+    "status": "active",
+    "type": {
+      "coding": [
+        {
+          "system": "https://bind.codes/OrganizationType",
+          "code": "tech-provider",
+          "display": "Technology Provider"
+        }
+      ]
+    },
+    "address": [
+      {
+        "use": "work",
+        "country": "CA",
+        "state": "QC"
+      }
+    ],
+    "contact": [
+      {
+        "system": "url",
+        "value": "https://cloudraker.com"
+      }
+    ]
+  }
+}
