@@ -226,7 +226,7 @@ function onImgError(e: Event) {
   border-collapse: collapse;
 }
 .detail-section td {
-  padding: 6px 12px 6px 0;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--vp-c-divider);
   vertical-align: top;
 }
