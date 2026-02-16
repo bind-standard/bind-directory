@@ -218,9 +218,9 @@ function generateDirectoryJson(participants: LoadedParticipant[]): string {
     .map((p) => ({
       ...p.manifest,
       iss: `${DIRECTORY_ISS_ROOT}/${p.slug}`,
-      logoUrl: `/logos/${p.slug}.png`,
-      jwksUrl: `/${p.slug}/.well-known/jwks.json`,
-      profileUrl: `/participants/${p.slug}`,
+      logoUrl: `${DIRECTORY_ISS_ROOT}/logos/${p.slug}.png`,
+      jwksUrl: `${DIRECTORY_ISS_ROOT}/${p.slug}/.well-known/jwks.json`,
+      profileUrl: `${DIRECTORY_ISS_ROOT}/participants/${p.slug}`,
     }));
 
   return JSON.stringify(
