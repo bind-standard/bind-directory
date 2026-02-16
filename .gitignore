@@ -5,6 +5,7 @@ dist/
 wrangler.jsonc
 site/participants/
 site/public/directory.json
+site/public/api/
 site/public/logos/
 site/.vitepress/dist/
 site/.vitepress/cache/

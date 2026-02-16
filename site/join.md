@@ -221,6 +221,20 @@ Available commands:
 New private keys from rotation are saved as `private-key-<thumbprint>.json` alongside the original. All `private-key*.json` files are gitignored.
 :::
 
+### API Access
+
+Once merged, your organization is available via the directory API:
+
+| Endpoint | Description |
+|----------|-------------|
+| `/api/v1/participants/index.json` | All active participants (lightweight listing) |
+| `/api/v1/participants/{slug}.json` | Your full manifest, JWKS, and URLs |
+| `/{slug}/.well-known/jwks.json` | Your public keys |
+| `/logos/{slug}.png` | Your logo (PNG) |
+| `/logos/{slug}.svg` | Your logo (SVG) |
+
+All URLs in API responses are absolute (`https://bindpki.org/...`), making them safe to use directly in client applications.
+
 ### Updating Your Profile
 
 Update your `manifest.json` and logos by submitting a PR with the changes.

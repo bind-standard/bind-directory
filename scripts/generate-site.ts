@@ -20,6 +20,8 @@ const siteDir = join(__dirname, "..", "site");
 const participantPagesDir = join(siteDir, "participants");
 const publicDir = join(siteDir, "public");
 const logosDir = join(publicDir, "logos");
+const apiDir = join(publicDir, "api", "v1");
+const apiParticipantsDir = join(apiDir, "participants");
 
 // Participant type labels for display
 const TYPE_LABELS: Record<string, string> = {
@@ -263,6 +265,73 @@ function copyParticipantAssets(participants: LoadedParticipant[]): void {
 }
 
 // ---------------------------------------------------------------------------
+// API: /api/v1/participants/
+// ---------------------------------------------------------------------------
+
+function generateApi(participants: LoadedParticipant[]): void {
+  mkdirSync(apiParticipantsDir, { recursive: true });
+
+  const activeParticipants = participants.filter((p) => p.manifest.status === "active");
+
+  // --- Index: lightweight listing ---
+  const index = {
+    schemaVersion: "1.0",
+    generatedAt: new Date().toISOString(),
+    total: activeParticipants.length,
+    participants: activeParticipants.map((p) => {
+      const orgType = getOrgType(p.manifest);
+      return {
+        slug: p.slug,
+        name: p.manifest.displayName || p.manifest.organization.name,
+        legalName: p.manifest.organization.name,
+        type: orgType,
+        typeLabel: TYPE_LABELS[orgType] || orgType,
+        status: p.manifest.status,
+        joinedAt: p.manifest.joinedAt,
+        iss: `${DIRECTORY_ISS_ROOT}/${p.slug}`,
+        urls: {
+          profile: `${DIRECTORY_ISS_ROOT}/participants/${p.slug}`,
+          jwks: `${DIRECTORY_ISS_ROOT}/${p.slug}/.well-known/jwks.json`,
+          manifest: `${DIRECTORY_ISS_ROOT}/api/v1/participants/${p.slug}.json`,
+          logoPng: `${DIRECTORY_ISS_ROOT}/logos/${p.slug}.png`,
+          logoSvg: `${DIRECTORY_ISS_ROOT}/logos/${p.slug}.svg`,
+        },
+      };
+    }),
+  };
+
+  writeFileSync(join(apiParticipantsDir, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
+
+  // --- Per-participant detail ---
+  for (const p of activeParticipants) {
+    const jwks = loadJwks(p.slug);
+    const orgType = getOrgType(p.manifest);
+
+    const detail = {
+      schemaVersion: "1.0",
+      generatedAt: new Date().toISOString(),
+      slug: p.slug,
+      iss: `${DIRECTORY_ISS_ROOT}/${p.slug}`,
+      urls: {
+        profile: `${DIRECTORY_ISS_ROOT}/participants/${p.slug}`,
+        jwks: `${DIRECTORY_ISS_ROOT}/${p.slug}/.well-known/jwks.json`,
+        logoPng: `${DIRECTORY_ISS_ROOT}/logos/${p.slug}.png`,
+        logoSvg: `${DIRECTORY_ISS_ROOT}/logos/${p.slug}.svg`,
+      },
+      type: orgType,
+      typeLabel: TYPE_LABELS[orgType] || orgType,
+      manifest: p.manifest,
+      jwks,
+    };
+
+    writeFileSync(
+      join(apiParticipantsDir, `${p.slug}.json`),
+      `${JSON.stringify(detail, null, 2)}\n`,
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -300,6 +369,13 @@ function main() {
   const directoryJson = generateDirectoryJson(participants);
   writeFileSync(join(publicDir, "directory.json"), `${directoryJson}\n`);
   console.log(`  ✓ public/directory.json`);
+
+  // Generate API
+  generateApi(participants);
+  console.log(`  ✓ api/v1/participants/index.json`);
+  for (const p of participants.filter((p) => p.manifest.status === "active")) {
+    console.log(`  ✓ api/v1/participants/${p.slug}.json`);
+  }
 
   // Copy static assets (logos, JWKS)
   copyParticipantAssets(participants);

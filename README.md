@@ -108,6 +108,33 @@ pnpm run manage-keys
 
 The script supports listing keys with status, generating a new key while setting a grace period on old keys, retiring individual keys, and removing expired keys. See the [How to Join](https://bindpki.org/join) guide for the full workflow.
 
+## API
+
+The directory is accessible as a JSON API at `bindpki.org/api/v1/`. All URLs in the responses are absolute.
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v1/participants/index.json` | Lightweight listing of all active participants (slug, name, type, ISS, URLs) |
+| `GET /api/v1/participants/{slug}.json` | Full participant detail (manifest, JWKS, absolute logo/profile URLs) |
+| `GET /{slug}/.well-known/jwks.json` | JWKS for a specific participant |
+| `GET /logos/{slug}.png` | Participant logo (PNG) |
+| `GET /logos/{slug}.svg` | Participant logo (SVG) |
+
+### Example
+
+```bash
+# List all participants
+curl https://bindpki.org/api/v1/participants/index.json
+
+# Get a specific participant
+curl https://bindpki.org/api/v1/participants/egr.json
+
+# Fetch a participant's JWKS
+curl https://bindpki.org/egr/.well-known/jwks.json
+```
+
+The API is statically generated at build time from the `participants/` directory — no runtime dependencies.
+
 ## Validation
 
 The directory includes a comprehensive validation pipeline that checks structure, manifests, JWKS (including rejection of private key material), and logos:
