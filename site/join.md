@@ -132,11 +132,25 @@ Export your **public** key(s) in JWKS format. Each key must have a unique `kid` 
       "use": "sig",
       "alg": "ES256",
       "x": "...",
-      "y": "..."
+      "y": "...",
+      "iat": 1739750400,
+      "exp": 1771286400
     }
   ]
 }
 ```
+
+### Key Lifecycle Fields
+
+Keys support optional temporal fields (Unix timestamps) for lifecycle management:
+
+| Field | Description |
+|-------|-------------|
+| `iat` | **Issued At** — when the key was created |
+| `nbf` | **Not Before** — key is not valid before this time |
+| `exp` | **Expires** — key is not valid after this time |
+
+These fields are validated but not enforced as errors — expired keys produce warnings (they may linger during rotation), and not-yet-valid keys produce warnings as well. If you use the scaffold script (`pnpm run join-directory`), `iat` is set automatically and you are prompted for `exp` and `nbf`.
 
 ::: danger IMPORTANT
 **Never include private key material.** The `d`, `p`, `q`, `dp`, `dq`, `qi`, and `k` fields must not be present. The validation pipeline will reject any JWKS containing private keys.

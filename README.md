@@ -84,7 +84,17 @@ Each participant's `manifest.json` contains organization metadata and an embedde
 
 ## JWKS
 
-Public keys are published in standard [JWKS](https://datatracker.ietf.org/doc/html/rfc7517) format. EC (P-256), RSA, and OKP key types are supported. Keys may include optional `nbf`, `exp`, and `iat` temporal fields for lifecycle management.
+Public keys are published in standard [JWKS](https://datatracker.ietf.org/doc/html/rfc7517) format. EC (P-256), RSA, and OKP key types are supported. The `kid` is an [RFC 7638](https://datatracker.ietf.org/doc/html/rfc7638) JWK Thumbprint (SHA-256, base64url).
+
+Keys support optional temporal fields (Unix timestamps) for lifecycle management:
+
+| Field | Description |
+|-------|-------------|
+| `iat` | Issued At — when the key was created |
+| `nbf` | Not Before — key is not valid before this time |
+| `exp` | Expires — key is not valid after this time |
+
+The validation pipeline warns on expired keys and not-yet-valid keys but does not reject them, since old keys may linger during rotation.
 
 Once merged, keys are served at `bindpki.org/<slug>/.well-known/jwks.json`.
 

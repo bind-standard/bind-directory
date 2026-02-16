@@ -196,6 +196,32 @@ async function main() {
   const thumbprint = crypto.createHash("sha256").update(thumbprintInput).digest("base64url");
   const kid = thumbprint;
 
+  // --- Key lifecycle (nbf / exp / iat) ---
+  const now = Math.floor(Date.now() / 1000);
+  console.log("\n  --- Key Lifecycle (optional) ---");
+  console.log("  You can set temporal fields on the key for lifecycle management.");
+  console.log("  Leave blank to skip.\n");
+
+  const expInput = await ask("  Key expiry in days from now (e.g. 365) [none]: ");
+  let exp: number | undefined;
+  if (expInput) {
+    const days = Number.parseInt(expInput, 10);
+    if (days > 0) {
+      exp = now + days * 86400;
+      console.log(`    exp set to ${new Date(exp * 1000).toISOString().split("T")[0]}`);
+    } else {
+      console.log("    Invalid number, skipping exp.");
+    }
+  }
+
+  const nbfInput = await ask("  Key valid starting in days from now (0 = now) [0]: ");
+  let nbf: number | undefined;
+  const nbfDays = Number.parseInt(nbfInput || "0", 10);
+  if (nbfDays > 0) {
+    nbf = now + nbfDays * 86400;
+    console.log(`    nbf set to ${new Date(nbf * 1000).toISOString().split("T")[0]}`);
+  }
+
   // --- Build output files ---
   const address: { use: string; country: string; state?: string } = { use: "work", country };
   if (state) address.state = state;
@@ -227,21 +253,22 @@ async function main() {
     organization,
   };
 
-  const jwks = {
-    keys: [
-      {
-        kty: pubJwk.kty,
-        x: pubJwk.x,
-        y: pubJwk.y,
-        crv: pubJwk.crv,
-        kid,
-        use: "sig",
-        alg: "ES256",
-      },
-    ],
+  const pubKeyObj: Record<string, unknown> = {
+    kty: pubJwk.kty,
+    x: pubJwk.x,
+    y: pubJwk.y,
+    crv: pubJwk.crv,
+    kid,
+    use: "sig",
+    alg: "ES256",
+    iat: now,
   };
+  if (nbf !== undefined) pubKeyObj.nbf = nbf;
+  if (exp !== undefined) pubKeyObj.exp = exp;
 
-  const privateKeyFile = {
+  const jwks = { keys: [pubKeyObj] };
+
+  const privKeyObj: Record<string, unknown> = {
     kty: privJwk.kty,
     x: privJwk.x,
     y: privJwk.y,
@@ -250,7 +277,10 @@ async function main() {
     kid,
     use: "sig",
     alg: "ES256",
+    iat: now,
   };
+  if (nbf !== undefined) privKeyObj.nbf = nbf;
+  if (exp !== undefined) privKeyObj.exp = exp;
 
   // --- Write files ---
   const dir = join(participantsDir, slug);
@@ -258,7 +288,7 @@ async function main() {
 
   writeFileSync(join(dir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
   writeFileSync(join(dir, "jwks.json"), `${JSON.stringify(jwks, null, 2)}\n`);
-  writeFileSync(join(dir, "private-key.json"), `${JSON.stringify(privateKeyFile, null, 2)}\n`);
+  writeFileSync(join(dir, "private-key.json"), `${JSON.stringify(privKeyObj, null, 2)}\n`);
   writeFileSync(join(dir, "logo.png"), PLACEHOLDER_PNG);
   writeFileSync(join(dir, "logo.svg"), PLACEHOLDER_SVG);
 
