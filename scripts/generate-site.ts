@@ -261,6 +261,24 @@ function copyParticipantAssets(participants: LoadedParticipant[]): void {
       mkdirSync(wellKnownDir, { recursive: true });
       copyFileSync(jwksSrc, join(wellKnownDir, "jwks.json"));
     }
+
+    // Generate redirect from /{slug}/ to /participants/{slug}
+    // so that the issuer URL (iss claim) resolves to the profile page
+    const issuerDir = join(publicDir, slug);
+    mkdirSync(issuerDir, { recursive: true });
+    const redirectHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=/participants/${slug}">
+<link rel="canonical" href="/participants/${slug}">
+<title>Redirecting to ${p.manifest.displayName || p.manifest.organization.name}</title>
+</head>
+<body>
+<p>Redirecting to <a href="/participants/${slug}">/participants/${slug}</a>...</p>
+</body>
+</html>`;
+    writeFileSync(join(issuerDir, "index.html"), redirectHtml);
   }
 }
 
